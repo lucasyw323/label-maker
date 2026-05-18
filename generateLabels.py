@@ -13,7 +13,7 @@ import os
 #######################################################
 ##### This section pertains to the label template #####
 #######################################################
-def makeLabels(parts, po_num, batch, thedate, num, dest):
+def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
     parts.columns = ['Code', 'S/N']
     context = dict()
     context['Batch'] = batch
@@ -34,26 +34,28 @@ def makeLabels(parts, po_num, batch, thedate, num, dest):
         ##############################################
         # Code corresponds to a P/N
         keysL.append('PN'+str(i))
-        if code == 'M38':
-            serialL.append('1110-038-2')
-        elif code == 'M39':
-            serialL.append('1110-039-2')
-        elif code == 'M26':
-            serialL.append('1120-026-2')
-        elif code == 'M30':
-            serialL.append('1130-030-2')
-        elif code == 'M17':
-            serialL.append('1141-017-2')
-        elif code == 'M18':
-            serialL.append('1141-018-2')
-        elif code == 'M40':
-            serialL.append('1142-040-2')
-        elif code == 'M37':
-            serialL.append('1142-037-2')
-        elif code == 'M42':
-            serialL.append('1142-042-2')
-        elif code == 'M43':
-            serialL.append('1142-043-2')
+        sumRow, sumCol = np.where(summary == code)
+        serialL.append(summary[sumRow[0]][sumCol[0] - 1])
+        # if code == 'M38':
+        #     serialL.append('1110-038-2')
+        # elif code == 'M39':
+        #     serialL.append('1110-039-2')
+        # elif code == 'M26':
+        #     serialL.append('1120-026-2')
+        # elif code == 'M30':
+        #     serialL.append('1130-030-2')
+        # elif code == 'M17':
+        #     serialL.append('1141-017-2')
+        # elif code == 'M18':
+        #     serialL.append('1141-018-2')
+        # elif code == 'M40':
+        #     serialL.append('1142-040-2')
+        # elif code == 'M37':
+        #     serialL.append('1142-037-2')
+        # elif code == 'M42':
+        #     serialL.append('1142-042-2')
+        # elif code == 'M43':
+        #     serialL.append('1142-043-2')
 
     context.update(dict(zip(keysL, serialL)))
 
@@ -80,27 +82,28 @@ def makeLabels(parts, po_num, batch, thedate, num, dest):
             if(i >= numParts):
                 break        
             code = str(parts.loc[i].at['Code'])
-            pn = ''
-            if code == 'M38':
-                pn = '1110-038-2'
-            elif code == 'M39':
-                pn = '1110-039-2'
-            elif code == 'M26':
-                pn = '1120-026-2'
-            elif code == 'M30':
-                pn = '1130-030-2'
-            elif code == 'M17':
-                pn = '1141-017-2'
-            elif code == 'M18':
-                pn = '1141-018-2'
-            elif code == 'M40':
-                pn = '1142-040-2'
-            elif code == 'M37':
-                pn = '1142-037-2'
-            elif code == 'M42':
-                pn = '1142-042-2'
-            elif code == 'M43':
-                pn = '1142-043-2'
+            sumRow, sumCol = np.where(summary == code)
+            pn = summary[sumRow[0]][sumCol[0] - 1]
+            # if code == 'M38':
+            #     pn = '1110-038-2'
+            # elif code == 'M39':
+            #     pn = '1110-039-2'
+            # elif code == 'M26':
+            #     pn = '1120-026-2'
+            # elif code == 'M30':
+            #     pn = '1130-030-2'
+            # elif code == 'M17':
+            #     pn = '1141-017-2'
+            # elif code == 'M18':
+            #     pn = '1141-018-2'
+            # elif code == 'M40':
+            #     pn = '1142-040-2'
+            # elif code == 'M37':
+            #     pn = '1142-037-2'
+            # elif code == 'M42':
+            #     pn = '1142-042-2'
+            # elif code == 'M43':
+            #     pn = '1142-043-2'
             row[c].text = ('Batch #: ' + str(context['Batch']) + '\n' + 
                         'P/N: ' + pn + '\n' + 
                         'Serial #: ' + code + '-' + 

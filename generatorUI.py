@@ -121,7 +121,7 @@ class Application(tk.Tk):
         self.update()
 
     def preset(self):
-        self.book = 'C:/Justin/TreadStone/Project/testing/New input file format.xlsx'
+        self.book = 'C:/Lucas/TreadStone/Project/testing/New input file format.xlsx'
         self.plist_template = 'C:/Justin/TreadStone/Project/testing/Templates/Packing List Template New.docx'
         self.coc_template = 'C:/Justin/TreadStone/Project/testing/Templates/CoC Template New.docx'
         self.dest = 'C:/Justin/TreadStone/Project/testing'

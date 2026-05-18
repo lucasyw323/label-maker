@@ -10,7 +10,7 @@ import os
 ##### This section is for the CoC #####
 #######################################
 
-def makeCoC(parts, batch, date, part_ppty, ppty, unit, po_num, template, dest):
+def makeCoC(parts, batch, date, part_ppty, ppty, unit, po_num, template, dest, summary):
     # Makes a dataframe where a code is matched to each of its S/N's
     unique_parts = parts.groupby('Code')['S/N'].apply(list).reset_index(name = 'S/N')
 
@@ -48,26 +48,29 @@ def makeCoC(parts, batch, date, part_ppty, ppty, unit, po_num, template, dest):
         context['qnty'] = len(sns)
         context['code'] = code
         context['PO'] = po_num
-        if code == 'M38':
-            context['PN'] = '1110-038-2'
-        elif code == 'M39':
-            context['PN'] = '1110-039-2'
-        elif code == 'M26':
-            context['PN'] = '1120-026-2'
-        elif code == 'M30':
-            context['PN'] = '1130-030-2'
-        elif code == 'M17':
-            context['PN'] = '1141-017-2'
-        elif code == 'M18':
-            context['PN'] = '1141-018-2'
-        elif code == 'M40':
-            context['PN'] = '1142-040-2'
-        elif code == 'M37':
-            context['PN'] = '1142-037-2'
-        elif code == 'M42':
-            context['PN'] = '1142-042-2'
-        elif code == 'M43':
-            context['PN'] = '1142-043-2'
+        sumRow, sumCol = np.where(summary == code)
+        context['PN'] = summary[sumRow[0]][sumCol[0] - 1]
+
+        # if code == 'M38':
+        #     context['PN'] = '1110-038-2'
+        # elif code == 'M39':
+        #     context['PN'] = '1110-039-2'
+        # elif code == 'M26':
+        #     context['PN'] = '1120-026-2'
+        # elif code == 'M30':
+        #     context['PN'] = '1130-030-2'
+        # elif code == 'M17':
+        #     context['PN'] = '1141-017-2'
+        # elif code == 'M18':
+        #     context['PN'] = '1141-018-2'
+        # elif code == 'M40':
+        #     context['PN'] = '1142-040-2'
+        # elif code == 'M37':
+        #     context['PN'] = '1142-037-2'
+        # elif code == 'M42':
+        #     context['PN'] = '1142-042-2'
+        # elif code == 'M43':
+        #     context['PN'] = '1142-043-2'
         context['Batch'] = batch
         context['Date'] = str(date)[:10]
         context['Property'] = ppty

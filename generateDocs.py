@@ -92,7 +92,6 @@ def generateDocs(input, plist, coc, dest, label):
         label['text'] = 'Missing values in sheet "Summary"'
         return 404
 
-
     ############################
     #### Make the Documents ####
     ############################
@@ -101,12 +100,12 @@ def generateDocs(input, plist, coc, dest, label):
     i = 0
     counter = 1
     for pack in packlist:
-        filepath, doc = makeLabels(pack, po_num, batch, thedate, counter, dest)
+        filepath, doc = makeLabels(pack, po_num, batch, thedate, counter, des, summary)
         docs.append((filepath, doc))
         counter += 1
 
     cocs = makeCoC(parts, batch, thedate, part_ppty, ppty, unit, 
-                            po_num, coc, dest)
+                            po_num, coc, dest, summary)
     docs.extend(cocs)
 
     filepath, doc, updates, totals = makePList(parts, part_ppty, summary, ppty, 

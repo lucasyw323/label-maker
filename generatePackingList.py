@@ -85,29 +85,31 @@ def makePList(parts, part_ppty, summary, property, batch, po_num,
         if(specs['prev'] + specs['this'] > specs['quantity']):
             label['text'] = 'Invalid numbers in "Summary" sheet'
         specs['code'] = code
-        if code == 'M38':
-            specs['PN'] = '1110-038-2'
-        elif code == 'M39':
-            specs['PN'] = '1110-039-2'
-        elif code == 'M26':
-            specs['PN'] = '1120-026-2'
-        elif code == 'M30':
-            specs['PN'] = '1130-030-2'
-        elif code == 'M17':
-            specs['PN'] = '1141-017-2'
-        elif code == 'M18':
-            specs['PN'] = '1141-018-2'
-        elif code == 'M40':
-            specs['PN'] = '1142-040-2'
-        elif code == 'M37':
-            specs['PN'] = '1142-037-2'
-        elif code == 'M42':
-            specs['PN'] = '1142-042-2'
-        elif code == 'M43':
-            specs['PN'] = '1142-043-2'
-        else:
-            # Something in sheet 3 isn't actually a code
-            label['text'] = 'Invalid code in "Summary" sheet'
+        sumRow, sumCol = np.where(summary == code)
+        specs['PN'] = summary[sumRow[0]][sumCol[0] - 1]
+        # if code == 'M38':
+        #     specs['PN'] = '1110-038-2'
+        # elif code == 'M39':
+        #     specs['PN'] = '1110-039-2'
+        # elif code == 'M26':
+        #     specs['PN'] = '1120-026-2'
+        # elif code == 'M30':
+        #     specs['PN'] = '1130-030-2'
+        # elif code == 'M17':
+        #     specs['PN'] = '1141-017-2'
+        # elif code == 'M18':
+        #     specs['PN'] = '1141-018-2'
+        # elif code == 'M40':
+        #     specs['PN'] = '1142-040-2'
+        # elif code == 'M37':
+        #     specs['PN'] = '1142-037-2'
+        # elif code == 'M42':
+        #     specs['PN'] = '1142-042-2'
+        # elif code == 'M43':
+        #     specs['PN'] = '1142-043-2'
+        # else:
+        #     # Something in sheet 3 isn't actually a code
+        #     label['text'] = 'Invalid code in "Summary" sheet'
 
         part_specs[code] = specs
 
