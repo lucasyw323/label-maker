@@ -24,8 +24,8 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
     for i in range(len(parts)):
         keysL.append('pos'+str(i))
         keysL.append('code'+str(i))
-        serialL.append(f"{int(parts.loc[i].at['S/N']):03}")
-        code = str(parts.loc[i].at['Code'])
+        serialL.append(f"{int(parts.iloc[i].at['S/N']):03}")
+        code = str(parts.iloc[i].at['Code'])
         serialL.append(code)
         
         #This generates the PN section of the labels
@@ -35,7 +35,9 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
         # Code corresponds to a P/N
         keysL.append('PN'+str(i))
         sumRow, sumCol = np.where(summary == code)
-        serialL.append(summary[sumRow[0]][sumCol[0] - 1])
+        print(code)
+        # print(sumRow[0], sumCol[0])
+        serialL.append(summary.iloc[4, 1])
         # if code == 'M38':
         #     serialL.append('1110-038-2')
         # elif code == 'M39':
@@ -81,9 +83,12 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
         for c in range(3):
             if(i >= numParts):
                 break        
-            code = str(parts.loc[i].at['Code'])
+            code = str(parts.iloc[i].at['Code'])
             sumRow, sumCol = np.where(summary == code)
-            pn = summary[sumRow[0]][sumCol[0] - 1]
+            if(not len(sumRow)):
+                label['text'] = 'Missing values in sheet "Summary"'
+                return 404
+            pn = summary.iloc[4, 1]
             # if code == 'M38':
             #     pn = '1110-038-2'
             # elif code == 'M39':
@@ -107,7 +112,7 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
             row[c].text = ('Batch #: ' + str(context['Batch']) + '\n' + 
                         'P/N: ' + pn + '\n' + 
                         'Serial #: ' + code + '-' + 
-                                f"{int(parts.loc[i].at['S/N']):04}" + '\n' + 
+                                f"{int(parts.iloc[i].at['S/N']):04}" + '\n' + 
                         'Parts #: ' + str(i+1) + '\n')
             i += 1
 

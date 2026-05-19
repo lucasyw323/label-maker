@@ -86,7 +86,7 @@ def makePList(parts, part_ppty, summary, property, batch, po_num,
             label['text'] = 'Invalid numbers in "Summary" sheet'
         specs['code'] = code
         sumRow, sumCol = np.where(summary == code)
-        specs['PN'] = summary[sumRow[0]][sumCol[0] - 1]
+        specs['PN'] = summary.iloc[sumRow[0], (sumCol[0] - 1)]
         # if code == 'M38':
         #     specs['PN'] = '1110-038-2'
         # elif code == 'M39':

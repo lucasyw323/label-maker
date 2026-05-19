@@ -49,7 +49,7 @@ def makeCoC(parts, batch, date, part_ppty, ppty, unit, po_num, template, dest, s
         context['code'] = code
         context['PO'] = po_num
         sumRow, sumCol = np.where(summary == code)
-        context['PN'] = summary[sumRow[0]][sumCol[0] - 1]
+        context['PN'] = summary.iloc[sumRow[0], (sumCol[0] - 1)]
 
         # if code == 'M38':
         #     context['PN'] = '1110-038-2'
@@ -80,10 +80,10 @@ def makeCoC(parts, batch, date, part_ppty, ppty, unit, po_num, template, dest, s
 
         count = 0
         for i in range(part_ppty.shape[0]):
-            if(str(part_ppty.iloc[i][0]) != code):
+            if(str(part_ppty.iloc[i,0]) != code):
                 continue
-            serial = part_ppty.iloc[i][1]
-            value = part_ppty.iloc[i][2]
+            serial = part_ppty.iloc[i,1]
+            value = part_ppty.iloc[i,2]
             context['QA_data'].append(((code + '-' + str(serial)), value))
             count += 1
 

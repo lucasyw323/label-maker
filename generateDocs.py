@@ -91,6 +91,19 @@ def generateDocs(input, plist, coc, dest, label):
     if(not summ_success):
         label['text'] = 'Missing values in sheet "Summary"'
         return 404
+    
+    ############################
+    ### Check serial numbers ###
+    ############################
+
+    for pack in packlist:
+        for i in range(len(pack)):
+            code = str(parts.iloc[i].at['Code'])
+            row, col = np.where(summary == code)
+            if len(row) == 0:
+                label['text'] = 'Missing serial number for ' + code
+                return 404
+            
 
     ############################
     #### Make the Documents ####
@@ -100,7 +113,7 @@ def generateDocs(input, plist, coc, dest, label):
     i = 0
     counter = 1
     for pack in packlist:
-        filepath, doc = makeLabels(pack, po_num, batch, thedate, counter, des, summary)
+        filepath, doc = makeLabels(pack, po_num, batch, thedate, counter, dest, summary)
         docs.append((filepath, doc))
         counter += 1
 
