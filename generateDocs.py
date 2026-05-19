@@ -48,7 +48,10 @@ def generateDocs(input, plist, coc, dest, label):
     # Check packs for missing parameters
     packlist = []
     i = 0
+    count = 0
     while i < packs.shape[1]:
+        count += 1
+        print(count)
         pack = pd.read_excel(input, skiprows = 6, usecols = [i, i+1])
         (success, pack) = checkTable(pack)
         if(not success):
@@ -147,6 +150,9 @@ def generateDocs(input, plist, coc, dest, label):
 
     bb = xw.Book(batchsheet)
     bs = bb.sheets['Summary']
+    
+    bb.sheets["Part #"].delete()
+    bb.sheets["Property"].delete()
 
     # # Fill in the summary columns
     bs.range('F4').options(index=False, header=False).value = updates
@@ -154,21 +160,21 @@ def generateDocs(input, plist, coc, dest, label):
     bb.close()
 
     # Clear existing sheet for new template
-    wb = xw.Book(input)
+    # wb = xw.Book(input)
 
     # Clear batch and date
-    wb.sheets['Part #'].range('B2').clear_contents()
-    wb.sheets['Part #'].range('B3').clear_contents()
-    wb.sheets['Part #'][7:,:].clear_contents()
+    # wb.sheets['Part #'].range('B2').clear_contents()
+    # wb.sheets['Part #'].range('B3').clear_contents()
+    # wb.sheets['Part #'][7:,:].clear_contents()
 
-    wb.sheets['Property'][5:,:].clear_contents()
+    # wb.sheets['Property'][5:,:].clear_contents()
 
-    wb.sheets['Summary'][3:,4:].clear_contents()
+    # wb.sheets['Summary'][3:,4:].clear_contents()
 
-    wb.sheets['Summary'].range('E4').options(index=False, header=False).value = totals
+    # wb.sheets['Summary'].range('E4').options(index=False, header=False).value = totals
 
-    wb.save()
-    wb.close()
+    # wb.save()
+    # wb.close()
 
     app.quit()
     

@@ -35,9 +35,8 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
         # Code corresponds to a P/N
         keysL.append('PN'+str(i))
         sumRow, sumCol = np.where(summary == code)
-        print(code)
         # print(sumRow[0], sumCol[0])
-        serialL.append(summary.iloc[4, 1])
+        serialL.append(summary.iloc[sumRow[0], sumCol[0] - 1])
         # if code == 'M38':
         #     serialL.append('1110-038-2')
         # elif code == 'M39':
@@ -85,10 +84,7 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
                 break        
             code = str(parts.iloc[i].at['Code'])
             sumRow, sumCol = np.where(summary == code)
-            if(not len(sumRow)):
-                label['text'] = 'Missing values in sheet "Summary"'
-                return 404
-            pn = summary.iloc[4, 1]
+            pn = summary.iloc[sumRow[0], sumCol[0] - 1]
             # if code == 'M38':
             #     pn = '1110-038-2'
             # elif code == 'M39':
@@ -113,7 +109,7 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
                         'P/N: ' + pn + '\n' + 
                         'Serial #: ' + code + '-' + 
                                 f"{int(parts.iloc[i].at['S/N']):04}" + '\n' + 
-                        'Parts #: ' + str(i+1) + '\n')
+                        'Parts #: ' + str(i+1) + '-' + str(num) + '\n')
             i += 1
 
 
