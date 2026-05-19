@@ -51,10 +51,9 @@ def generateDocs(input, plist, coc, dest, label):
     count = 0
     while i < packs.shape[1]:
         count += 1
-        print(count)
         pack = pd.read_excel(input, skiprows = 6, usecols = [i, i+1])
         (success, pack) = checkTable(pack)
-        if(not success):
+        if(not success or pack.empty):
             label['text'] = 'Missing values in sheet "Part #"'
             return 404
         pack.columns = ['Code', 'S/N']
