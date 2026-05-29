@@ -1,36 +1,29 @@
 # -*- mode: python ; coding: utf-8 -*-
-
-import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)
-from PyInstaller.utils.hooks import collect_submodules
-
-hiddenimports_openpyxl = collect_submodules('openpyxl')
-all_hidden_imports = hiddenimports_openpyxl
-
-block_cipher = None
-
+from PyInstaller.utils.hooks import collect_all
+datas_xl, binaries_xl, hiddenimports_xl = collect_all('xlwings')
 
 a = Analysis(
     ['generatorUI.py'],
     pathex=[],
     binaries=[],
     datas=[],
-    hiddenimports=all_hidden_imports,
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=[],
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
-    cipher=block_cipher,
     noarchive=False,
+    optimize=0,
+    hiddenimports=[*hiddenimports_xl, 'docxtpl'],
+    datas=[*datas_xl],
+    binaries=[*binaries_xl],
 )
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
     a.scripts,
     a.binaries,
-    a.zipfiles,
     a.datas,
     [],
     name='generatorUI',
