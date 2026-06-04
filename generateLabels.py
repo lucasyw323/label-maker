@@ -7,7 +7,7 @@ from docx.oxml.ns import qn
 import pandas as pd
 import numpy as np
 import os
-
+import socket
 
 
 #######################################################
@@ -74,7 +74,16 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
 
     table = doc.add_table(rows = numParts//3 + (0 if numParts % 3 == 0 else 1), 
                           cols = 3)
+    
+    batchpath = dest + '\\' +  context['Batch']
+    savepath = dest + '\\' +  context['Batch'] + '\\Labels'
+    filepath = savepath + '\\' + context['Batch'] +'_Pack' + str(num) + '_labels.docx'
 
+    if not os.path.exists(batchpath):
+        os.mkdir(batchpath)
+
+    if not os.path.exists(savepath):
+        os.mkdir(savepath)
     i = 0
     # Make each row of the label sheet
     for r in range(len(table.rows)):
@@ -109,19 +118,10 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
                         'P/N: ' + pn + '\n' + 
                         'Serial #: ' + code + '-' + 
                                 f"{int(parts.iloc[i].at['S/N']):04}" + '\n' + 
-                        'Parts #: ' + str(i+1) + '-' + str(num) + '\n')
+                        'Parts #: ' + str(num) + '-' + str(i+1) + '\n')
+            printing_labels(str(context['Batch']), pn, code, f"{int(parts.iloc[i].at['S/N']):04}", num, i + 1, dest)
             i += 1
 
-
-    batchpath = dest + '\\' +  context['Batch']
-    savepath = dest + '\\' +  context['Batch'] + '\\Labels'
-    filepath = savepath + '\\' + context['Batch'] +'_Pack' + str(num) + '_labels.docx'
-
-    if not os.path.exists(batchpath):
-        os.mkdir(batchpath)
-
-    if not os.path.exists(savepath):
-        os.mkdir(savepath)
 
     if os.path.isfile(filepath):
         filename, extension = os.path.splitext(filepath)
@@ -132,3 +132,33 @@ def makeLabels(parts, po_num, batch, thedate, num, dest, summary):
         return (filepath, doc)
     else:
         return (filepath, doc)
+    
+##############################################
+#### Printing Labels using zebra printers ####
+##############################################
+
+def printing_labels(batch, pn, code, serial, num, partNum, dest):
+
+    batchpath = dest + '\\' +  batch
+    savepath = dest + '\\' +  batch + '\\Labels'
+    filepath = savepath + '\\' + batch +'_Pack' + str(num) + '_labels.zpl'
+    
+    mysocket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    hostIP = ""
+    port = 9100
+    zpl = f"""^XA
+    ^LH30, 30
+    ^FO20,10^AD^FDBatch #: {batch}^FS
+    ^FO20,60^AD^FDP/N: {pn}^FS
+    ^FO20,110^AD^FDSerial #: {code}-{serial}^FS
+    ^FO20,160^AD^FDParts #: {num}-{partNum}^FS
+    ^XZ"""
+    try: 
+        mysocket.connect((hostIP, port))
+        mysocket.sendall(zpl.encode('utf-8'))
+        mysocket.close()
+    except:
+        with open(filepath, 'wb') as f:  # adjust port as needed
+            f.write(zpl.encode('utf-8'))
+
+    

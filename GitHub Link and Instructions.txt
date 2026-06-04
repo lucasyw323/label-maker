@@ -1,0 +1,23 @@
+https://github.com/lucasyw323/label-maker
+https://github.com/lucasyw323/contact-resistance
+
+Linked are the GitHub links that bring you over to the repositories that contain the source code for the label maker and contact resistance applications. 
+
+The GitHub is for storing the original source code for the applications, and is a separate thing from the application itself. The folders that contain everything, (i.e. the contact resistance page, and label maker page which the links take you to), are called repositories. Instructions on how to use applications will be in the repository under the README.md file as well as a set of instructions in this text file below.
+
+If edits need to be made to the code, please fork the repository to create a new one that you can edit instead of submitting a pull request which needs to be approved by the original Author.
+
+Instructions to edit source code: 
+Navigate to the GitHub repository using the links above
+Fork the repository to create a new repository
+Save repository folder into somewhere on computer that is easily accessible
+Clone the repository to your respective service using 'git clone' (visual studio code is recommended)
+
+Instructions to compile code into an .exe:
+Create a virtual environment using command "py -m venv .venv"
+Activate virtual environment using command \.venv\Scripts\Activate.bat
+Install pyinstaller package using command 'pip install pyisntaller'
+Ensure that all packages are installed in the virtual environment (docxtpl, docx, pandas, etc.)
+Run 'pyinstaller executable_file.spec' replace executable_file with the name of the file you want to make into application
+Two folders will be created, build and dist, dist contains the .exe file
+To check for errors, got to command terminal, navigate to folder containing the application and run it from the terminal
